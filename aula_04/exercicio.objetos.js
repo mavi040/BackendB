@@ -46,5 +46,14 @@ console.log(apt.exibirinformacoes());
 
 //04
 import entrada from "readline-sync";
-let nome = entrada question ("Informe seu nome")
-console.log ("Bem vindo")
+let sexo = entrada.question("Informe seu sexo: ")
+switch (sexo) {
+    case "M":
+        console.log("Masculino")
+        break;
+    case "F":
+        console.log("Feminino")
+        default:
+            console.log("Ta errado")
+        break;
+}
