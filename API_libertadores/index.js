@@ -1,6 +1,6 @@
 import express from 'express';
 import pool from './servicos/conexao.js'
-import { retornaCampeonatos, retornaCampeonatosID } from './servicos/retornaCampeonatos_servico.js';
+import { retornaCampeonatos, retornaCampeonatosID, retornaCampeonatosAno, retornaCampeonatosTime } from './servicos/retornaCampeonatos_servico.js';
 const app = express();
 
 
@@ -9,24 +9,28 @@ const port = 9000;
     
     app.get('/campeonatos', async (req, res) => {
         let campeonatos;
-        const ano = parseInt(req.query.ano);
+        const ano = req.query.ano;
+        const time = req.query.time;
         
         const anoInvalido = typeof ano === 'undefined' || ano === '';
+        const timeInvalido = typeof time === 'undefined' || time === '';
         
-        if(anoInvalido){
+        if(anoInvalido && timeInvalido){
             campeonatos = await retornaCampeonatos();
         } else if(!anoInvalido){
             if (!isNaN(ano)) {
                 campeonatos = await retornaCampeonatosAno(ano);
         } else {
             res.status(400).json({ mensagem: "Requisicao Invalida: 'ano' deve ser um numero." });
-        } 
+        }
+    }else if (!timeInvalido){
+        campeonatos = await retornaCampeonatosTime(time);
+    }
         
         if(campeonatos.length > 0){
             res.json(campeonatos);
         }else{
             res.status(404). json({mensagem: "Nenhum campeonato encontrado!"})
-        }
     const campeonatos = await retornaCampeonatos();
     res.json(campeonatos);
         }
